@@ -1,0 +1,8 @@
+﻿## Interface: 20200
+## Title: Fane 
+## Author: Haste
+## Version: 1.0
+## X-eMail: troeks@gmail.com
+## Notes: Improved chat tabs!
+
+tabs.lua
