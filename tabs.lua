@@ -3,24 +3,24 @@ local event = CreateFrame"Frame"
 local dummy = function() end
 
 local OnEnter = function(self)
-	self:SetTextColor(1, 1, 0)
-	self:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
+	self:SetTextColor(.64, .207, .933)
+	self:SetFont(STANDARD_TEXT_FONT, 10, "OUTLINE")
 end
 local OnLeave = function(self)
 	if(_G["ChatFrame"..self:GetID()] == SELECTED_CHAT_FRAME) then
-		self:SetTextColor(1, 1, 0)
+		self:SetTextColor(.64, .207, .933)
 	else
 		self:SetTextColor(1, 1, 1)
 	end
 
-	self:SetFont(STANDARD_TEXT_FONT, 9)
+	self:SetFont(STANDARD_TEXT_FONT, 10)
 end
 local OnShow = function(self)
-	self:GetParent():SetFont(STANDARD_TEXT_FONT, 10)
+	self:GetParent():SetFont(STANDARD_TEXT_FONT, 11)
 	self:GetParent():SetTextColor(1, 0, 0)
 end
 local OnHide = function(self)
-	self:GetParent():SetFont(STANDARD_TEXT_FONT, 9)
+	self:GetParent():SetFont(STANDARD_TEXT_FONT, 10)
 	self:GetParent():SetTextColor(1, 1, 1)
 end
 
@@ -43,7 +43,7 @@ local rollCF = function()
 
 		tab.SetAlpha = dummy
 		if(chat == SELECTED_CHAT_FRAME) then
-			tab:SetTextColor(1, 1, 0)
+			tab:SetTextColor(.64, .207, .933)
 		else
 			tab:SetTextColor(1, 1, 1)
 		end
@@ -72,7 +72,7 @@ event.PLAYER_LOGIN = function()
 
 		for k, v in pairs(DOCKED_CHAT_FRAMES) do
 			if(v == SELECTED_CHAT_FRAME) then
-				_G[v:GetName().."Tab"]:SetTextColor(1, 1, 0)
+				_G[v:GetName().."Tab"]:SetTextColor(.64, .207, .933)
 			else
 				_G[v:GetName().."Tab"]:SetTextColor(1, 1, 1)
 			end
