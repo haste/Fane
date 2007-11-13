@@ -53,6 +53,7 @@ local rollCF = function()
 			tab:Show()
 			tab.Hide = dummy
 		else
+			tab.SetAlpha = nil
 			tab.Hide = nil
 		end
 	end
