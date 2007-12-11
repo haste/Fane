@@ -31,10 +31,12 @@
 
 local event = CreateFrame"Frame"
 local dummy = function() end
+local inherit = GameFontNormalSmall
 
 local OnEnter = function(self)
+	local f, s = inherit:GetFont()
 	self:SetTextColor(.64, .207, .933)
-	self:SetFont(STANDARD_TEXT_FONT, 10, "OUTLINE")
+	self:SetFont(f, s, "OUTLINE")
 end
 local OnLeave = function(self)
 	if(_G["ChatFrame"..self:GetID()] == SELECTED_CHAT_FRAME) then
@@ -43,14 +45,17 @@ local OnLeave = function(self)
 		self:SetTextColor(1, 1, 1)
 	end
 
-	self:SetFont(STANDARD_TEXT_FONT, 10)
+	local f, s = inherit:GetFont()
+	self:SetFont(f, s)
 end
 local OnShow = function(self)
-	self:GetParent():SetFont(STANDARD_TEXT_FONT, 11)
+	local f, s = inherit:GetFont()
+	self:GetParent():SetFont(f, s+1)
 	self:GetParent():SetTextColor(1, 0, 0)
 end
 local OnHide = function(self)
-	self:GetParent():SetFont(STANDARD_TEXT_FONT, 10)
+	local f, s = inherit:GetFont()
+	self:GetParent():SetFont(f, s)
 	self:GetParent():SetTextColor(1, 1, 1)
 end
 
