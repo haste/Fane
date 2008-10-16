@@ -2,30 +2,46 @@ local event = CreateFrame"Frame"
 local dummy = function() end
 local inherit = GameFontNormalSmall
 
-local OnEnter = function(self)
-	local f, s = inherit:GetFont()
-	self:GetFontString():SetTextColor(.64, .207, .933)
-	self:GetFontString():SetFont(f, s, "OUTLINE")
-end
-local OnLeave = function(self)
-	if(_G["ChatFrame"..self:GetID()] == SELECTED_CHAT_FRAME) then
-		self:GetFontString():SetTextColor(.64, .207, .933)
+local updateFS = function(self, inc, flags, ...)
+	if(self.GetFontString) then
+		self = self:GetFontString()
 	else
-		self:GetFontString():SetTextColor(1, 1, 1)
+		self = self:GetParent():GetFontString()
 	end
 
-	local f, s = inherit:GetFont()
-	self:GetFontString():SetFont(f, s)
+	local font, fontSize = inherit:GetFont()
+	if(inc) then
+		self:SetFont(font, fontSize + 1, flags)
+	else
+		self:SetFont(font, fontSize, flags)
+	end
+
+	if((...)) then
+		self:SetTextColor(...)
+	end
 end
+
+local OnEnter = function(self)
+	updateFS(self, nil, 'OUTLINE', .64, .207, .933)
+end
+
+local OnLeave = function(self)
+	local r, g, b
+	if(_G["ChatFrame"..self:GetID()] == SELECTED_CHAT_FRAME) then
+		r, g, b = .63, .207, .933
+	else
+		r, g, b = 1, 1, 1
+	end
+
+	updateFS(self, nil, nil, r, g, b)
+end
+
 local OnShow = function(self)
-	local f, s = inherit:GetFont()
-	self:GetParent():SetFont(f, s+1)
-	self:GetParent():SetTextColor(1, 0, 0)
+	updateFS(self, true, nil, 1, 0 , 0)
 end
+
 local OnHide = function(self)
-	local f, s = inherit:GetFont()
-	self:GetParent():SetFont(f, s)
-	self:GetParent():SetTextColor(1, 1, 1)
+	updateFS(self, nil, nil, 1, 1, 1)
 end
 
 local rollCF = function()
@@ -47,9 +63,9 @@ local rollCF = function()
 
 		tab.SetAlpha = dummy
 		if(chat == SELECTED_CHAT_FRAME) then
-			tab:GetFontString():SetTextColor(.64, .207, .933)
+			updateFS(tab, nil, nil, .64, .207, .933)
 		else
-			tab:GetFontString():SetTextColor(1, 1, 1)
+			updateFS(tab, nil, nil, 1, 1, 1)
 		end
 		tab:GetHighlightTexture():SetTexture(nil)
 
@@ -75,10 +91,14 @@ event.PLAYER_LOGIN = function()
 		_orig_FCF_Tab_OnClick(...)
 
 		for k, v in pairs(DOCKED_CHAT_FRAMES) do
+			local tab = _G[v:GetName() .. 'Tab']
+			local flash = _G[v:GetName() .. 'TabFlash']
 			if(v == SELECTED_CHAT_FRAME) then
-				_G[v:GetName().."Tab"]:GetFontString():SetTextColor(.64, .207, .933)
+				updateFS(tab, nil, nil, .64, .207, .933)
+			elseif(flash:IsShown()) then
+				updateFS(tab, nil, nil, 1, 0, 0)
 			else
-				_G[v:GetName().."Tab"]:GetFontString():SetTextColor(1, 1, 1)
+				updateFS(tab, nil, nil, 1, 1, 1)
 			end
 		end
 	end
