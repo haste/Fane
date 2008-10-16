@@ -1,7 +1,7 @@
-﻿## Interface: 20400
+﻿## Interface: 30000
 ## Title: Fane
 ## Author: Haste
-## Version: 1.1
+## Version: 1.2
 ## X-eMail: troeks@gmail.com
 ## Notes: Improved chat tabs!
 
