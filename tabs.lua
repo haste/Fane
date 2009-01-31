@@ -82,8 +82,9 @@ end
 event.PLAYER_LOGIN = function()
 	rollCF()
 	hooksecurefunc("FCF_OpenNewWindow", rollCF)
-	hooksecurefunc("FCF_Close", function(self)
-		UIParent.Hide(_G[self:GetName().."Tab"])
+	hooksecurefunc("FCF_Close", function(self, fallback)
+		local frame = fallback or self
+		UIParent.Hide(_G[frame:GetName().."Tab"])
 	end)
 
 	local _orig_FCF_Tab_OnClick = FCF_Tab_OnClick
