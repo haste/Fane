@@ -22,7 +22,8 @@ local updateFS = function(self, inc, flags, ...)
 end
 
 local OnEnter = function(self)
-	updateFS(self, nil, 'OUTLINE', .64, .207, .933)
+	local flash = _G["ChatFrame"..self:GetID()..'TabFlash']
+	updateFS(self, flash:IsShown(), 'OUTLINE', .64, .207, .933)
 end
 
 local OnLeave = function(self)
