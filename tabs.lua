@@ -37,7 +37,7 @@ local OnLeave = function(self)
 end
 
 local OnShow = function(self)
-	updateFS(self, true, nil, 1, 0 , 0)
+	updateFS(self, true, nil, 1, 0, 0)
 end
 
 local OnHide = function(self)
