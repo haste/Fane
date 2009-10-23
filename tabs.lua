@@ -97,7 +97,7 @@ event.PLAYER_LOGIN = function()
 			if(v == SELECTED_CHAT_FRAME) then
 				updateFS(tab, nil, nil, .64, .207, .933)
 			elseif(flash:IsShown()) then
-				updateFS(tab, nil, nil, 1, 0, 0)
+				updateFS(tab, true, nil, 1, 0, 0)
 			else
 				updateFS(tab, nil, nil, 1, 1, 1)
 			end
