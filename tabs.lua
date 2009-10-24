@@ -27,15 +27,14 @@ local OnEnter = function(self)
 end
 
 local OnLeave = function(self)
-	local r, g, b, emphasis
+	local r, g, b
 	local id = self:GetID()
-	local flash = _G["ChatFrame"..id..'TabFlash']
+	local emphasis = _G["ChatFrame"..id..'TabFlash']:IsShown()
 
 	if (_G["ChatFrame"..id] == SELECTED_CHAT_FRAME) then
 		r, g, b = .64, .207, .933
-	elseif (flash:IsShown()) then
+	elseif emphasis then
 		r, g, b = 1, 0, 0
-		emphasis = true
 	else
 		r, g, b = 1, 1, 1
 	end
