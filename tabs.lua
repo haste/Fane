@@ -32,22 +32,22 @@ local OnLeave = function(self)
 	local emphasis = _G["ChatFrame"..id..'TabFlash']:IsShown()
 
 	if (_G["ChatFrame"..id] == SELECTED_CHAT_FRAME) then
-		r, g, b = .64, .207, .933
-	elseif emphasis then
-		r, g, b = 1, 0, 0
-	else
 		r, g, b = 1, 1, 1
+	elseif emphasis then
+		r, g, b = 1, .2, 0
+	else
+		r, g, b = .4, .4, .4
 	end
 
-	updateFS(self, emphasis, nil, r, g, b)
+	updateFS(self, emphasis, 'OUTLINE', r, g, b)
 end
 
 local OnShow = function(self)
-	updateFS(self, true, nil, 1, 0, 0)
+	updateFS(self, true, 'OUTLINE', 1, .2, 0)
 end
 
 local OnHide = function(self)
-	updateFS(self, nil, nil, 1, 1, 1)
+	updateFS(self, nil, 'OUTLINE', .4, .4, .4)
 end
 
 local rollCF = function()
@@ -69,9 +69,9 @@ local rollCF = function()
 
 		tab.SetAlpha = dummy
 		if(chat == SELECTED_CHAT_FRAME) then
-			updateFS(tab, nil, nil, .64, .207, .933)
+			updateFS(tab, nil, 'OUTLINE', 1, 1, 1)
 		else
-			updateFS(tab, nil, nil, 1, 1, 1)
+			updateFS(tab, nil, 'OUTLINE', .4, .4, .4)
 		end
 		tab:GetHighlightTexture():SetTexture(nil)
 
@@ -101,11 +101,11 @@ event.PLAYER_LOGIN = function()
 			local tab = _G[v:GetName() .. 'Tab']
 			local flash = _G[v:GetName() .. 'TabFlash']
 			if(v == SELECTED_CHAT_FRAME) then
-				updateFS(tab, nil, nil, .64, .207, .933)
+				updateFS(tab, nil, 'OUTLINE', 1, 1, 1)
 			elseif(flash:IsShown()) then
-				updateFS(tab, true, nil, 1, 0, 0)
+				updateFS(tab, true, 'OUTLINE', 1, .2, 0)
 			else
-				updateFS(tab, nil, nil, 1, 1, 1)
+				updateFS(tab, nil, 'OUTLINE', .4, .4, .4)
 			end
 		end
 	end
