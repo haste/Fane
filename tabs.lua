@@ -22,8 +22,19 @@ local updateFS = function(self, inc, flags, ...)
 end
 
 local OnEnter = function(self)
-	local emphasis = _G["ChatFrame"..self:GetID()..'TabFlash']:IsShown()
-	updateFS(self, emphasis, 'OUTLINE', .64, .207, .933)
+	local r, g, b
+    local id = self:GetID()
+	local emphasis = _G["ChatFrame"..id..'TabFlash']:IsShown()
+
+    if (_G["ChatFrame"..id] == SELECTED_CHAT_FRAME) then
+		return
+	elseif emphasis then
+		r, g, b = 1, .3, .1
+	else
+	    r, g, b = .7, .7, .7
+    end
+
+	updateFS(self, emphasis, 'OUTLINE', r, g, b)
 end
 
 local OnLeave = function(self)
