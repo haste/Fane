@@ -1,6 +1,6 @@
 local event = CreateFrame"Frame"
 local dummy = function() end
-local inherit = GameFontNormal
+local inherit = GameFontNormalSmall
 
 local updateFS = function(self, inc, flags, ...)
 	if(self.GetFontString) then
