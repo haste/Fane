@@ -22,8 +22,8 @@ local updateFS = function(self, inc, flags, ...)
 end
 
 local OnEnter = function(self)
-	local flash = _G["ChatFrame"..self:GetID()..'TabFlash']
-	updateFS(self, flash:IsShown(), 'OUTLINE', .64, .207, .933)
+	local emphasis = _G["ChatFrame"..self:GetID()..'TabFlash']:IsShown()
+	updateFS(self, emphasis, 'OUTLINE', .64, .207, .933)
 end
 
 local OnLeave = function(self)
