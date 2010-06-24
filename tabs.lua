@@ -37,7 +37,7 @@ local OnLeave = function(self)
 	updateFS(self, emphasis, nil, r, g, b)
 end
 
-faneifyTab = function(frame, sel)
+local faneifyTab = function(frame, sel)
 	local i = frame:GetID()
 
 	if(not frame.Fane) then
