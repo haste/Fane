@@ -1,23 +1,18 @@
-local event = CreateFrame"Frame"
-local dummy = function() end
+local Fane = CreateFrame'Frame'
 local inherit = GameFontNormalSmall
 
 local updateFS = function(self, inc, flags, ...)
-	if(self.GetFontString) then
-		self = self:GetFontString()
-	else
-		self = self:GetParent():GetFontString()
-	end
+	local fstring = self:GetFontString()
 
 	local font, fontSize = inherit:GetFont()
 	if(inc) then
-		self:SetFont(font, fontSize + 1, flags)
+		fstring:SetFont(font, fontSize + 1, flags)
 	else
-		self:SetFont(font, fontSize, flags)
+		fstring:SetFont(font, fontSize, flags)
 	end
 
 	if((...)) then
-		self:SetTextColor(...)
+		fstring:SetTextColor(...)
 	end
 end
 
@@ -42,78 +37,44 @@ local OnLeave = function(self)
 	updateFS(self, emphasis, nil, r, g, b)
 end
 
-local OnShow = function(self)
-	updateFS(self, true, nil, 1, 0, 0)
-end
+faneifyTab = function(frame, sel)
+	local i = frame:GetID()
 
-local OnHide = function(self)
-	updateFS(self, nil, nil, 1, 1, 1)
-end
+	if(not frame.Fane) then
+		frame.leftTexture:Hide()
+		frame.middleTexture:Hide()
+		frame.rightTexture:Hide()
 
-local rollCF = function()
-	for i = 1, 7 do
-		local chat = _G["ChatFrame"..i]
-		local tab = _G["ChatFrame"..i.."Tab"]
-		local flash = _G["ChatFrame"..i.."TabFlash"]
+		frame.leftSelectedTexture:Hide()
+		frame.middleSelectedTexture:Hide()
+		frame.rightSelectedTexture:Hide()
 
-		flash:GetRegions():SetTexture(nil)
-		flash:SetScript("OnShow", OnShow)
-		flash:SetScript("OnHide", OnHide)
+		frame.leftSelectedTexture.Show = frame.leftSelectedTexture.Hide
+		frame.middleSelectedTexture.Show = frame.middleSelectedTexture.Hide
+		frame.rightSelectedTexture.Show = frame.rightSelectedTexture.Hide
 
-		_G["ChatFrame"..i.."TabLeft"]:Hide()
-		_G["ChatFrame"..i.."TabMiddle"]:Hide()
-		_G["ChatFrame"..i.."TabRight"]:Hide()
+		frame.leftHighlightTexture:Hide()
+		frame.middleHighlightTexture:Hide()
+		frame.rightHighlightTexture:Hide()
 
-		tab:SetScript("OnEnter", OnEnter)
-		tab:SetScript("OnLeave", OnLeave)
+		local tab = _G['ChatFrame' .. i .. 'Tab']
+		tab:HookScript('OnEnter', OnEnter)
+		tab:HookScript('OnLeave', OnLeave)
 
-		tab.SetAlpha = dummy
-		if(chat == SELECTED_CHAT_FRAME) then
-			updateFS(tab, nil, nil, .64, .207, .933)
-		else
-			updateFS(tab, nil, nil, 1, 1, 1)
-		end
-		tab:GetHighlightTexture():SetTexture(nil)
+		frame.Fane = true
+	end
 
-		if(chat.isDocked) then
-			tab:Show()
-			tab.Hide = dummy
-		else
-			tab.SetAlpha = nil
-			tab.Hide = nil
-		end
+	if(i == SELECTED_CHAT_FRAME:GetID()) then
+		updateFS(frame, nil, nil, .64, .207, .933)
+	else
+		updateFS(frame, nil, nil, 1, 1, 1)
 	end
 end
 
-event.PLAYER_LOGIN = function()
-	rollCF()
-	hooksecurefunc("FCF_OpenNewWindow", rollCF)
-	hooksecurefunc("FCF_Close", function(self, fallback)
-		local frame = fallback or self
-		UIParent.Hide(_G[frame:GetName().."Tab"])
-	end)
-
-	local _orig_FCF_Tab_OnClick = FCF_Tab_OnClick
-	FCF_Tab_OnClick = function(...)
-		_orig_FCF_Tab_OnClick(...)
-
-		for k, v in pairs(DOCKED_CHAT_FRAMES) do
-			local tab = _G[v:GetName() .. 'Tab']
-			local flash = _G[v:GetName() .. 'TabFlash']
-			if(v == SELECTED_CHAT_FRAME) then
-				updateFS(tab, nil, nil, .64, .207, .933)
-			elseif(flash:IsShown()) then
-				updateFS(tab, true, nil, 1, 0, 0)
-			else
-				updateFS(tab, nil, nil, 1, 1, 1)
-			end
-		end
-	end
-
-	FCF_ChatTabFadeFinished = dummy
-end
-
-event:SetScript("OnEvent", function(self, event, ...)
-	self[event](self, event, ...)
+hooksecurefunc('FCF_StartAlertFlash', function(frame)
+	local tab = _G['ChatFrame' .. frame:GetID() .. 'Tab']
+	updateFS(tab, true, nil, 1, 0, 0)
 end)
-event:RegisterEvent"PLAYER_LOGIN"
+
+hooksecurefunc('FCFTab_UpdateColors', faneifyTab)
+faneifyTab(ChatFrame2Tab)
