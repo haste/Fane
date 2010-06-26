@@ -77,4 +77,7 @@ hooksecurefunc('FCF_StartAlertFlash', function(frame)
 end)
 
 hooksecurefunc('FCFTab_UpdateColors', faneifyTab)
-faneifyTab(ChatFrame2Tab)
+
+for i=1,7 do
+	faneifyTab(_G['ChatFrame' .. i .. 'Tab'])
+end
