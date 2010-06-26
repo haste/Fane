@@ -57,9 +57,8 @@ local faneifyTab = function(frame, sel)
 		frame.middleHighlightTexture:Hide()
 		frame.rightHighlightTexture:Hide()
 
-		local tab = _G['ChatFrame' .. i .. 'Tab']
-		tab:HookScript('OnEnter', OnEnter)
-		tab:HookScript('OnLeave', OnLeave)
+		frame:HookScript('OnEnter', OnEnter)
+		frame:HookScript('OnLeave', OnLeave)
 
 		frame.Fane = true
 	end
