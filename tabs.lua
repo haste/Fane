@@ -37,6 +37,18 @@ local OnLeave = function(self)
 	updateFS(self, emphasis, nil, r, g, b)
 end
 
+local ChatFrame2_SetAlpha = function(self, alpha)
+	if(CombatLogQuickButtonFrame_Custom) then
+		CombatLogQuickButtonFrame_Custom:SetAlpha(alpha)
+	end
+end
+
+local ChatFrame2_GetAlpha = function(self)
+	if(CombatLogQuickButtonFrame_Custom) then
+		return CombatLogQuickButtonFrame_Custom:GetAlpha()
+	end
+end
+
 local faneifyTab = function(frame, sel)
 	local i = frame:GetID()
 
@@ -60,6 +72,22 @@ local faneifyTab = function(frame, sel)
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
 
+		frame:SetAlpha(1)
+
+		if(i ~= 2) then
+			-- Might not be the best solution, but we avoid hooking into the UIFrameFade
+			-- system this way.
+			frame.SetAlpha = UIFrameFadeRemoveFrame
+		else
+			frame.SetAlpha = ChatFrame2_SetAlpha
+			frame.GetAlpha = ChatFrame2_GetAlpha
+
+			-- We do this here as people might be using AddonLoader together with Fane.
+			if(CombatLogQuickButtonFrame_Custom) then
+				CombatLogQuickButtonFrame_Custom:SetAlpha(.4)
+			end
+		end
+
 		frame.Fane = true
 	end
 
@@ -81,3 +109,17 @@ hooksecurefunc('FCFTab_UpdateColors', faneifyTab)
 for i=1,7 do
 	faneifyTab(_G['ChatFrame' .. i .. 'Tab'])
 end
+
+function Fane:ADDON_LOADED(event, addon)
+	if(addon == 'Blizzard_CombatLog') then
+		self:UnregisterEvent(event)
+		self[event] = nil
+
+		return CombatLogQuickButtonFrame_Custom:SetAlpha(.4)
+	end
+end
+Fane:RegisterEvent'ADDON_LOADED'
+
+Fane:SetScript('OnEvent', function(self, event, ...)
+	return self[event](self, event, ...)
+end)
